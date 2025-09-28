@@ -12,4 +12,11 @@ RUN chmod +x entrypoint.py
 
 ENV PYTHONPATH=/app/src:$PYTHONPATH
 
-ENTRYPOINT ["uv", "run", "./entrypoint.py"]
+# Copia lo script di avvio personalizzato per Cloud Run
+COPY cloudrun-start.sh /app/cloudrun-start.sh
+RUN chmod +x /app/cloudrun-start.sh
+
+# Forza MCP a usare streamable-http
+ENV MCP_TRANSPORT=streamable-http
+
+CMD ["/bin/sh", "/app/cloudrun-start.sh"]
